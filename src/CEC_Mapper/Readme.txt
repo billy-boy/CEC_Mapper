@@ -1,0 +1,83 @@
+﻿CEC_Mapper by billy-boy
+
+The CEC_Mapper reacts on HDMI CEC events received by an adapter controlled from libCEC. This is normaly a Pulse-Eight USB CEC Adapter.
+For more information about libCEC or Pulse-Eight please visit: http://www.pulse-eight.com/store/
+
+You will not need to confg any other software or libCEC. This will be done all through CEC_Mapper.
+Important: You can not use more than one software communicating with your adapter. So if you run this software please deactivate the libCEC controll in your MediaPortal, XBMC or whatever.
+
+You have to copy your libCEC library to the applications base directory in order to work. Please the below at the section "libCEC".
+Please be shure and patient to make the right settings for libCEC inside the configuration tool of CEC_Mapper. You can reach the configuration tool from the taskbar tray icon. libCEC is very sensitive with wrong settings.
+
+The CEC_Mapper receives all the keys pressed on your remote (all the ones libCEC can handle) and some predefined events (only some of the ones libCEC can handle because most are not important).
+
+CEC_Mapper will translate these keys to keyboard keys as you defined. These keyboard keys will be sent to your application like you pressed them on your keyboard. With this handling it's possible to use nearly any application with your TV's remote.
+Because of limits in the Windows API it is only possible to send keyboard input to the actual front window. But this is no big problem. CEC_Mapper stores lists by process name. So you can save key mappings for more than one application.
+
+Normaly you can configure all settings very easy through the config menu (you can find it in the tray icon). If you want to edit manualy here are some information:
+Important: If you edit things manualy some of them could be overwritten if you then use the config tool later on. You can use the config tool to view all, but in some cases add/delete will overwrite manually settings.
+
+libCEC
+----------------
+Please copy your libcec.dll and LibCecSharp.dll inside the applications base directory.
+This is done because different versions of libCEC communicate with different firmwares of the adapters. To be open for own experimentations you can copy the versions you need.
+We tested with libCEC 2.1.4.0-
+
+Key Code Mapping
+----------------
+Under your application directory all the key mapping settings are stored in the "mapping" folder. For each process there exists a file called "PROCESSNAME.cfg". It's important that the name is right.
+The file structure is very simple. There exist three sections to controll the mapping.
+
+[Process]
+Name=notepad
+[KeyMap_KeyPress]
+0=45,Shift
+[KeyMap_Events]
+SourceActivated=MAKRO:C:\Windows\system32\calc.exe
+
+This is a small sample for the "notepad" as process with actual front window. The detecting is based on the real parent process's name of a window. So subwindows (like DialogBoxes) are detected well.
+As you can see the section [KeyMap_KeyPress] stands for the remote keys while [KeyMap_Events] stands for all the events raised.
+
+An [KeyMap_KeyPress] entry's token is presented by the 32-bit Integer value of it's enum given from libCEC (you can find it out by looking in the debug logs when pressing keys on your remote) or simple have a look in the documentation of libCEC. It represtens the "CecUserControlCode" enum.
+An [KeyMap_Events] entry's token is presented by it's String-Definition. There are the following possible:
+SourceActivated=
+SourceDeactivated=
+Please note. These events are only used if the actual front window of Windows belongs to the process specified! These aren't global hooks.
+
+The value of each token consists either of the information to press a keyboard key or of the word "MAKRO:" in case the CEC_Mapper should execute another application.
+A keyboard key is presented by it's 32-bit Interger value as it's defined in the .NET "Keys" enum (cast it to an int and you see the result). If there also should pressed modifier keys (Shift, Alt, Control) these must be added separated by comma:
+0=45,Shift,Alt,Control
+The order is not important. Only the first entry after the "=" has to be the 32-bit Integer value.
+A macro is presented by the word "MAKRO:" followed by the path to the application you want run. After that you can specify arguments for your application, if a window should created (in case of console scripts) or which window state this window should have:
+0=MAKRO:C:\Windows\system32\shutdown.exe,-r,true,0
+The parameters for Argument, CreateNoWindow and WindowState need not to exist. They are passed directly to .NET's ProcessStartInfo. The value for CreateNoWindow must be "true" or "false" and the value for WindowStyle represents the 32-Bit Integer cast of the System.Diagnostics.ProcessWindowStyle enum.
+
+libCEC Configuration
+--------------------
+The most problems resist in HDMI CEC configuration. Please be absolutely shure that all the settings here are correct. You can edit them in the program base dir in "config.cfg" (and via config tool also).
+It looks like:
+
+DeviceType=1
+DeviceName=HTPC
+ConnectionTimeout=2000
+CEC_LogLevel=31
+CEC_Vendor=240
+HDMI_Port=3
+CEC_BaseDevice=5
+
+The DeviceType is the type of device THIS pc is reacting at. Mostly it's "RecordingDevice1". The DeviceType is presented by the 32-Bit Integer cast oft it's libCEC value.
+The DeviceName is the name which is shown on your TV for this device.
+The ConnectionTimeout is the timeout between liBCEC and your adapter. So if your adapter does not answear after this time it raises a failure. But don't be worry, CEC_Mapper trys again and again. ;-)
+The CEC_LogLevel represent the level of log given from your adapter to libCEC. With this we could get all the traffic on the HDMI CEC. It's again a cast to 32-bit Integer.
+Important: If you want to see the log messages you have to turn on DEBUG-Log for the CEC_Mapper which is done in the applications XML configuration.
+The CEC_Vendor (hey it's an 32-Bit integer cast) representes vendor specific CEC extensions for libCEC. Select your Vendor or None.
+The HDMI_Port is the most important value. It's an Byte cast! As I know libCEC can handle only numbers from 1 to 15. It represents the port number on which your PC is connected to the next device (TV or AVR).
+This number is very important and must be right. If it's wrong there is no communication!
+The CEC_BaseDevice represents the device on which this PC is connected (AVR or TV or so on). It's very important again that this is correct!
+
+Logging
+--------------------
+If you want to have a look whats going on (which keys are translated to what or why not) you can look in the application log. The log is in the application base dir and called 'Log.txt'.
+If you want to see debug information (for libCEC log messages or so on) you can enable this in the applications XML configuration. We are using log4net for this.
+For more information visit: http://logging.apache.org/log4net/
+Improtant: You have to restart the whole application to make this setting valid.

@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{27BB1BD2-5ADE-48FA-AF3E-60DDA9DB27DD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>billy_boy.CEC_Mapper</RootNamespace>
+    <AssemblyName>billy_boy.CEC_Mapper</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>..\..\bin\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>false</MapFileExtensions>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>false</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\latest_debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\remote.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>3FACB132C7BCF6EEE2FDD32A648A963C451299B9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>billy_boy.CEC_Mapper_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="InputSimulator">
+      <HintPath>lib\InputSimulator.dll</HintPath>
+    </Reference>
+    <Reference Include="LibCecSharp, Version=2.1.4.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Pulse-Eight\USB-CEC Adapter\LibCecSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>M:\Dokumente von Markus\Visual Studio 2012\Projects\CEC_Mapper\CEC_Mapper\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="ObjectListView">
+      <HintPath>lib\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CEC_KeySender.cs" />
+    <Compile Include="CEC_Mapper.cs" />
+    <Compile Include="CEC_MapperThread.cs" />
+    <Compile Include="ComboBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="frmConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConfig.Designer.cs">
+      <DependentUpon>frmConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmkeyMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmkeyMap.Designer.cs">
+      <DependentUpon>frmkeyMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProcess.Designer.cs">
+      <DependentUpon>frmProcess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CEC_Objects\billy_boy.CEC_Objects.csproj">
+      <Project>{bca9f2a5-f0eb-4cc0-bbb9-a571e4bc1a16}</Project>
+      <Name>billy_boy.CEC_Objects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CEC_Receiver\billy_boy.CEC_Receiver.csproj">
+      <Project>{a48ba5b0-8ce3-4126-8e19-183bc890caf6}</Project>
+      <Name>billy_boy.CEC_Receiver</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmConfig.resx">
+      <DependentUpon>frmConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmkeyMap.resx">
+      <DependentUpon>frmkeyMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProcess.resx">
+      <DependentUpon>frmProcess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="billy_boy.CEC_Mapper_TemporaryKey.pfx" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Resources\remote.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\add_256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\delete_256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>“M:\Dokumente von Markus\Visual Studio 2012\Projects\ProjectBuildCounter.exe” “M:\Dokumente von Markus\Visual Studio 2012\Projects\CEC_Mapper\src\CEC_Mapper\Properties\AssemblyInfo.cs” B</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

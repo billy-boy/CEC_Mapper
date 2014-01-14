@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "billy_boy.CEC_Mapper", "CEC_Mapper\billy_boy.CEC_Mapper.csproj", "{27BB1BD2-5ADE-48FA-AF3E-60DDA9DB27DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "billy_boy.CEC_Receiver", "CEC_Receiver\billy_boy.CEC_Receiver.csproj", "{A48BA5B0-8CE3-4126-8E19-183BC890CAF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "billy_boy.CEC_Objects", "CEC_Objects\billy_boy.CEC_Objects.csproj", "{BCA9F2A5-F0EB-4CC0-BBB9-A571E4BC1A16}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27BB1BD2-5ADE-48FA-AF3E-60DDA9DB27DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27BB1BD2-5ADE-48FA-AF3E-60DDA9DB27DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27BB1BD2-5ADE-48FA-AF3E-60DDA9DB27DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27BB1BD2-5ADE-48FA-AF3E-60DDA9DB27DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A48BA5B0-8CE3-4126-8E19-183BC890CAF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A48BA5B0-8CE3-4126-8E19-183BC890CAF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A48BA5B0-8CE3-4126-8E19-183BC890CAF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A48BA5B0-8CE3-4126-8E19-183BC890CAF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCA9F2A5-F0EB-4CC0-BBB9-A571E4BC1A16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCA9F2A5-F0EB-4CC0-BBB9-A571E4BC1A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCA9F2A5-F0EB-4CC0-BBB9-A571E4BC1A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCA9F2A5-F0EB-4CC0-BBB9-A571E4BC1A16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
