@@ -13,6 +13,7 @@ namespace billy_boy.CEC_Receiver
         private LibCecSharp _lib;
         private LibCECConfiguration _config;
         private bool _connected = false;
+        private String _port = "";
 
         /// <summary>
         /// Inititalise receiver class and configuration for communication with CEC adapter via libCEC. Does not conenct, use Start() for this.
@@ -95,6 +96,7 @@ namespace billy_boy.CEC_Receiver
                 _lib.Dispose();
             }
 
+            _port = "";
             _connected = false;
 
             _lib = null;
@@ -290,6 +292,7 @@ namespace billy_boy.CEC_Receiver
             _connected = _lib.Open(port, timeout);
             if (_connected)
             {
+                _port = port;
                 if (log.IsInfoEnabled) log.Info("Connected succesfully to CEC-adapter on port: [" + port+"].");
                 if (log.IsDebugEnabled) log.Debug("TV vendor: [" + _lib.GetDeviceVendorId(CecLogicalAddress.Tv).ToString()+"]");
                 if (log.IsDebugEnabled) log.Debug("AVR connected: [" + _lib.IsActiveDevice(CecLogicalAddress.AudioSystem).ToString() + "] vendor: ["
@@ -309,6 +312,7 @@ namespace billy_boy.CEC_Receiver
         {
             if (log.IsDebugEnabled) log.Debug("Closing connection.");
             _lib.Close();
+            _port = "";
             _connected = false;
         }
 
@@ -320,7 +324,7 @@ namespace billy_boy.CEC_Receiver
         {
             bool ping = _lib.PingAdapter();
             if (!ping && log.IsErrorEnabled) log.Error("Lost connection while watchdog adapter (Ping).");
-            if (!ping) _connected = false;
+            if (!ping) { _connected = false; _port = ""; }
             return ping;
         }
 
@@ -414,6 +418,12 @@ namespace billy_boy.CEC_Receiver
             return _lib.PollDevice(address);
         }
 
+        public CecVendorId getVendorId(CecLogicalAddress address)
+        {
+            return _lib.GetDeviceVendorId(address);
+        }
+
+
         /// <summary>
         /// Internal connection state. Better use active connection check via Ping()
         /// </summary>
@@ -446,6 +456,13 @@ namespace billy_boy.CEC_Receiver
                 return ret;
             }
         }
+        public String Port
+        {
+            get
+            {
+                return _port;
+            }
+        }     
         public String DeviceName { get { return _config.DeviceName; } }
         public int LogLevel { get { return _logLevel; } set { _logLevel = value; } }
 

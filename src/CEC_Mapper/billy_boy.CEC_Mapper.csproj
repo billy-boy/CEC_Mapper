@@ -85,6 +85,7 @@
     <Reference Include="log4net">
       <HintPath>M:\Dokumente von Markus\Visual Studio 2012\Projects\CEC_Mapper\CEC_Mapper\lib\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="ObjectListView">
       <HintPath>lib\ObjectListView.dll</HintPath>
     </Reference>
@@ -106,6 +107,12 @@
     </Compile>
     <Compile Include="frmConfig.Designer.cs">
       <DependentUpon>frmConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmControl.Designer.cs">
+      <DependentUpon>frmControl.cs</DependentUpon>
     </Compile>
     <Compile Include="frmkeyMap.cs">
       <SubType>Form</SubType>
@@ -149,6 +156,9 @@
   <ItemGroup>
     <EmbeddedResource Include="frmConfig.resx">
       <DependentUpon>frmConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmControl.resx">
+      <DependentUpon>frmControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmkeyMap.resx">
       <DependentUpon>frmkeyMap.cs</DependentUpon>
@@ -212,6 +222,43 @@
     <None Include="img\delete_256.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="img\remote_16px.png" />
+    <None Include="img\remote_24px.png" />
+    <None Include="img\remote_32px.png" />
+    <None Include="img\remote_48px.png" />
+    <None Include="img\remote_64px.png" />
+    <None Include="img\remote_72px.png" />
+    <None Include="img\remote_96px.png" />
+    <None Include="img\remote_128px.png" />
+    <None Include="img\remote_256px.png" />
+    <None Include="img\remote_400px.png" />
+    <None Include="img\TV_16px.png" />
+    <None Include="img\TV_32px.png" />
+    <None Include="img\TV_64px.png" />
+    <None Include="img\TV_128px.png" />
+    <None Include="img\TV_256px.png" />
+    <None Include="img\warn_16px.png" />
+    <None Include="img\warn_24px.png" />
+    <None Include="img\warn_32px.png" />
+    <None Include="img\warn_48px.png" />
+    <None Include="img\warn_64px.png" />
+    <None Include="img\warn_128px.png" />
+    <None Include="img\warn_256px.png" />
+    <None Include="img\cancel_16px.png" />
+    <None Include="img\cancel_24px.png" />
+    <None Include="img\cancel_32px.png" />
+    <None Include="img\cancel_48px.png" />
+    <None Include="img\cancel_64px.png" />
+    <None Include="img\cancel_128px.png" />
+    <None Include="img\cancel_256px.png" />
+    <None Include="img\tv_test_16px.png" />
+    <None Include="img\tv_test_24px.png" />
+    <None Include="img\tv_test_32px.png" />
+    <None Include="img\testbild_24px.png" />
+    <None Include="img\testbild_32px.png" />
+    <None Include="img\testbild_64px.png" />
+    <None Include="img\connected_24px.png" />
+    <None Include="img\disconnected_24px.png" />
     <Content Include="Readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

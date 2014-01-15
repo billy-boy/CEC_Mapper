@@ -27,7 +27,7 @@ namespace billy_boy.CEC_Mapper
 
         public CEC_MapperThread()
         {
-            Start();
+            //Start();
         }
 
         ~CEC_MapperThread()
@@ -68,6 +68,10 @@ namespace billy_boy.CEC_Mapper
             _mapperThread.Start();
             if (log.IsDebugEnabled) log.Debug("Started the mapper thread.");
         }
+
+        public bool Running { get { return (_mapperThread != null && _mapperThread.IsAlive); } }
+        public Int32 ThreadId { get { if (_mapperThread != null) return _mapperThread.ManagedThreadId; return 0; } }
+        public CEC_Mapper Mapper { get { if (_mapper != null) return _mapper; return null; } }
 
     }
 }

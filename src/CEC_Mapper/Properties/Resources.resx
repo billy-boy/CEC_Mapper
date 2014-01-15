@@ -139,6 +139,27 @@
   <data name="add_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\add_64.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="cancel_128px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_128px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel_16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_16px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel_24px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_24px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel_256px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_256px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_32px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_48px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cancel_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\cancel_64px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="delete_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\delete_128.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -162,5 +183,86 @@
   </data>
   <data name="remote" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\remote.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_128px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_128px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_16px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_24px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_24px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_256px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_256px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_32px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_400px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_400px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_48px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_64px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_72px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_72px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="remote_96px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\remote_96px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TV_128px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\TV_128px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TV_16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\TV_16px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TV_256px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\TV_256px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TV_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\TV_32px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TV_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\TV_64px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_128px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_128px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_16px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_16px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_24px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_24px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_256px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_256px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_32px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_48px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_48px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warn_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\warn_64px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="connected_24px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\connected_24px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="disconnected_24px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\disconnected_24px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="testbild_24px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\testbild_24px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="testbild_32px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\testbild_32px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="testbild_64px" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\testbild_64px.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

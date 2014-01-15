@@ -19,7 +19,7 @@ namespace billy_boy.CEC_Mapper
         
         public CEC_Mapper()
         {
-            Init();
+            //Init();
         }
 
         ~CEC_Mapper()
@@ -58,6 +58,7 @@ namespace billy_boy.CEC_Mapper
 
         public void DoWork()
         {
+            Init();
             StartStopWorker();
             while (!_shouldStop)
             {
@@ -67,7 +68,20 @@ namespace billy_boy.CEC_Mapper
             if (log.IsDebugEnabled) log.Debug("mapper thread terminated gracefully.");
         }
 
-        private void Stop()
+        public void Restart()
+        {
+            StartStopWorker();
+        }
+
+        public void Start()
+        {
+            if (_workerThread == null || !_workerThread.IsAlive)
+            {
+                StartStopWorker();
+            }
+        }
+
+        public void Stop()
         {
             while (_workerThread != null && _workerThread.IsAlive) { _worker.RequestStop(); }
             _worker = null;
@@ -85,5 +99,9 @@ namespace billy_boy.CEC_Mapper
             if (log.IsInfoEnabled) log.Info("HDMI CEC key pressed: [" + e.KeyCode.ToString() + "]");
             CEC_KeySender.SendMapingKey(e.KeyCode);
         }
+
+        public bool Running { get { return (_workerThread != null && _workerThread.IsAlive); } }
+        public Int32 ThreadId { get { if (_workerThread != null) return _workerThread.ManagedThreadId; return 0; } }
+        public CEC_Worker Worker { get { if (_worker != null) return _worker; return null; } }
     }
 }

@@ -9,6 +9,7 @@ namespace billy_boy.CEC_Receiver
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private volatile bool _shouldStop = false;
+        private bool _connected = false;
 
         private CEC_Receiver _receiver = null;
 
@@ -78,12 +79,14 @@ namespace billy_boy.CEC_Receiver
         private void CheckAlive()
         {
             //Check connection to adapter
-            while (!_receiver.Connected || !_receiver.Ping())
+            while (!_shouldStop && (!_receiver.Connected || !_receiver.Ping()))
             {
+                _connected = false;
                 if (log.IsWarnEnabled) log.Warn("worker thread: receiver lost connection to adapter. Try to restart.");
                 _receiver.Start();
                 Thread.Sleep(CEC_Config.ConnectionTimeout);
             }
+            _connected = true;
         }
 
         private void Stop()
@@ -92,9 +95,14 @@ namespace billy_boy.CEC_Receiver
             {
                 _receiver.Stop();
             }
+            _connected = false;
             _receiver = null;
             if (log.IsDebugEnabled) log.Debug("Stoped the worker thread.");
         }
+
+        public bool Connected { get { return _connected;  } }
+        public String Adpater_Port { get { if (_receiver != null) return _receiver.Port; return ""; } }
+        public CEC_Receiver Receiver { get { return _receiver; } }
 
         #region Backward event handler
 

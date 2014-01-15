@@ -51,5 +51,31 @@ namespace billy_boy.CEC_Receiver
             }
             str.Close();
         }
+
+        public static void saveConfig(String file)
+        {
+            if (!File.Exists(file))
+            {
+                if (log.IsInfoEnabled) log.Info("Saving libCEC configuraton to new file ["+file+"]");
+            }
+            else
+            {
+                if (log.IsInfoEnabled) log.Info("Saving libCEC configuraton to existing file ["+file+"]");            
+            }
+            File.WriteAllText(file,CEC_Config.ToString());
+        }
+
+        public static String ToString()
+        {
+            String res =
+                "DeviceType=" + ((Int32)DeviceType).ToString() + "\r\n" +
+                "DeviceName=" + DeviceName + "\r\n" +
+                "ConnectionTimeout=" + ((Int32)ConnectionTimeout).ToString() + "\r\n" +
+                "CEC_LogLevel=" + ((Int32)CEC_LogLevel).ToString() + "\r\n" +
+                "CEC_Vendor=" + ((Int32)CEC_Vendor).ToString() + "\r\n" +
+                "HDMI_Port=" + ((byte)HDMI_Port).ToString() + "\r\n" +
+                "CEC_BaseDevice=" + ((Int32)CEC_BaseDevice).ToString() + "\r\n";
+            return res;
+        }
     }
 }

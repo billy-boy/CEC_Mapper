@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -90,6 +91,8 @@ namespace billy_boy.CEC_Mapper
             CEC_Receiver.CEC_Config.CEC_LogLevel = (CecSharp.CecLogLevel)_cmbLogLevel.SelectedItem;
             CEC_Receiver.CEC_Config.CEC_Vendor = (CecSharp.CecVendorId)_cmbVendorId.SelectedItem;
             CEC_Receiver.CEC_Config.CEC_BaseDevice = (CecSharp.CecLogicalAddress)_cmbBaseDevice.SelectedItem;
+
+            CEC_Receiver.CEC_Config.saveConfig(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, @"config.cfg"));
         }
 
         private void InitListViews()
@@ -381,6 +384,18 @@ namespace billy_boy.CEC_Mapper
         private void _lstKeyMapMakroList_SelectionChanged(object sender, EventArgs e)
         {
             _lstKeyMapKeyList.DeselectAll();
+        }
+
+        private void _tabControl_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (e.TabPage == _tabPage_LibCEC)
+            {
+                this.Size = new Size(540,390);
+            }
+            else
+            {
+                this.Size = new Size(1200,420);
+            }
         }
 
     }

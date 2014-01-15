@@ -13,6 +13,7 @@ namespace billy_boy.CEC_Mapper
     public partial class frmMain : Form
     {
         public frmConfig _configFrm = null;
+        public frmControl _controlFrm = null;
 
         public frmMain()
         {
@@ -61,6 +62,31 @@ namespace billy_boy.CEC_Mapper
                 _configFrm = new frmConfig();
                 _configFrm.Show();
             }
+        }
+
+        private void controlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_controlFrm != null && _controlFrm.IsDisposed)
+                _controlFrm = null;
+
+            if (_controlFrm == null)
+            {
+                _controlFrm = new frmControl();
+                _controlFrm.Show();
+            }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (_configFrm != null && _configFrm.IsDisposed)
+                _configFrm = null;
+            else if (_configFrm != null)
+                _configFrm.Close();
+        
+            if (_controlFrm != null && _controlFrm.IsDisposed)
+                _controlFrm = null;
+            else if (_controlFrm != null)
+                _controlFrm.Close();
         }
     }
 
