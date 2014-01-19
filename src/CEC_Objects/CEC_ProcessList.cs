@@ -9,6 +9,8 @@ namespace billy_boy.CEC_Objects
 {
     public class CEC_ProcessList : System.Collections.CollectionBase
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         #region Singleton
 
         private static CEC_ProcessList _instance = null;
@@ -108,12 +110,13 @@ namespace billy_boy.CEC_Objects
                     mapping.AddMapping(cec_key, new CEC_KeyboardKey(makro));
                 }
                 else
-                {                  
+                {
+                    CEC_Enums.CEC_KeyPressMode keyPressMode = CEC_Enums.CEC_KeyPressMode.KeyPress;
                     byte keycode;
                     if (!Byte.TryParse(spl[0].Trim(), out keycode))
                         return;
                     Keys keyboard_keys = (Keys)keycode;
-                    for (int i = 1; i < spl.Length - 1; i++)
+                    for (int i = 1; i < spl.Length; i++)
                     {
                         if (spl[i].Trim().ToLower() == "shift")
                             keyboard_keys = keyboard_keys | Keys.Shift;
@@ -121,9 +124,11 @@ namespace billy_boy.CEC_Objects
                             keyboard_keys = keyboard_keys | Keys.Alt;
                         else if (spl[i].Trim().ToLower() == "control")
                             keyboard_keys = keyboard_keys | Keys.Control;
+                        else if (spl[i].Trim().ToLower() == "keydownup")
+                            keyPressMode = CEC_Enums.CEC_KeyPressMode.KeyDownUp;
                     }
                     if (cec_key != -1)
-                        mapping.AddMapping(cec_key, new CEC_KeyboardKey(keyboard_keys));
+                        mapping.AddMapping(cec_key, new CEC_KeyboardKey(keyboard_keys, keyPressMode));
                 }
             }
             else if (section == "KeyMap_Events")
@@ -153,7 +158,8 @@ namespace billy_boy.CEC_Objects
                     mapping.AddMapping(cec_event, new CEC_KeyboardKey(makro));
                 }
                 else
-                {                
+                {
+                    CEC_Enums.CEC_KeyPressMode keyPressMode = CEC_Enums.CEC_KeyPressMode.KeyPress;
                     byte keycode;
                     if (!Byte.TryParse(spl[0].Trim(), out keycode))
                         return;
@@ -166,9 +172,11 @@ namespace billy_boy.CEC_Objects
                             keyboard_keys = keyboard_keys | Keys.Alt;
                         else if (spl[i].Trim().ToLower() == "control")
                             keyboard_keys = keyboard_keys | Keys.Control;
+                        else if (spl[i].Trim().ToLower() == "keydownup")
+                            keyPressMode = CEC_Enums.CEC_KeyPressMode.KeyDownUp;
                     }
                     if (cec_event != CEC_Enums.CEC_Event.None)
-                        mapping.AddMapping(cec_event, new CEC_KeyboardKey(keyboard_keys));
+                        mapping.AddMapping(cec_event, new CEC_KeyboardKey(keyboard_keys, keyPressMode));
                 }
             }
         }
@@ -196,7 +204,11 @@ namespace billy_boy.CEC_Objects
                     if (spl.Length > 1)
                     {
                         if (section == "Process" && spl[0].Trim() == "Name")
-                        {
+                        {                          
+                            if ((spl[1].Trim()+ ".cfg") != fileName)
+                            {
+                                if (log.IsErrorEnabled) log.Error("Process name [" + spl[1].Trim() + "] in file [" + fileName + "] is not equal to file's name! This will cause problems in the configuration GUI.");
+                            }
                             mapping = this[spl[1].Trim()];
                             if (mapping == null) mapping = new CEC_Process(spl[1].Trim());
                             mapping.ClearMappings();

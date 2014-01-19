@@ -48,7 +48,7 @@
     <Compile Include="CEC_Receiver.cs" />
     <Compile Include="CEC_Adapter.cs" />
     <Compile Include="CEC_EventArgs.cs" />
-    <Compile Include="CEC_Worker.cs" />
+    <Compile Include="CEC_ReceiverThread.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

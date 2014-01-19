@@ -71,7 +71,7 @@ namespace billy_boy.CEC_Objects
                 CEC_KeyMapList list = new CEC_KeyMapList();
                 foreach (CEC_KeyMap map in base.InnerList)
                 {
-                    if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                    if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                         list.Add(map);
                 }
                 return list;
@@ -85,7 +85,7 @@ namespace billy_boy.CEC_Objects
                 CEC_KeyMapList list = new CEC_KeyMapList();
                 foreach (CEC_KeyMap map in base.InnerList)
                 {
-                    if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro)
+                    if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Makro)
                         list.Add(map);
                 }
                 return list;

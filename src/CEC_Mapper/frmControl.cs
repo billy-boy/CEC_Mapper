@@ -100,11 +100,12 @@ namespace billy_boy.CEC_Mapper
             if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null
                 && !(CEC_MapperThread.getInstance().Mapper.Worker.Receiver.PowerStatus(CecSharp.CecLogicalAddress.Tv) == CecSharp.CecPowerStatus.Unknown))
             {
-                _lblTVInfo_Status.Text = "TV: " + CEC_MapperThread.getInstance().Mapper.Worker.Receiver.getVendorId(CecSharp.CecLogicalAddress.Tv).ToString();
+                String tvinfo = "TV: " + CEC_MapperThread.getInstance().Mapper.Worker.Receiver.getVendorId(CecSharp.CecLogicalAddress.Tv).ToString();
                 if (CEC_MapperThread.getInstance().Mapper.Worker.Receiver.PowerStatus(CecSharp.CecLogicalAddress.AudioSystem) != CecSharp.CecPowerStatus.Unknown)
                 {
-                    _lblTVInfo_Status.Text += " + AVR: " + CEC_MapperThread.getInstance().Mapper.Worker.Receiver.getVendorId(CecSharp.CecLogicalAddress.AudioSystem).ToString();
+                    tvinfo += " + AVR: " + CEC_MapperThread.getInstance().Mapper.Worker.Receiver.getVendorId(CecSharp.CecLogicalAddress.AudioSystem).ToString();
                 }
+                _lblTVInfo_Status.Text = tvinfo;
                 _lblTVInfo_Status.ForeColor = Color.DarkGreen;
             }
             else
@@ -158,9 +159,19 @@ namespace billy_boy.CEC_Mapper
             {
                 case "_btnMapper": if (CEC_MapperThread.getInstance().Running) CEC_MapperThread.getInstance().Stop(); else CEC_MapperThread.getInstance().Start(); break;
                 case "_btnReceiver": if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Running) CEC_MapperThread.getInstance().Mapper.Stop(); else if (CEC_MapperThread.getInstance().Mapper != null) CEC_MapperThread.getInstance().Mapper.Start(); break;
-                case "_btnTV": if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null && (CEC_MapperThread.getInstance().Mapper.Worker.Receiver.PowerStatus(CecSharp.CecLogicalAddress.Tv) == CecSharp.CecPowerStatus.On || CEC_MapperThread.getInstance().Mapper.Worker.Receiver.PowerStatus(CecSharp.CecLogicalAddress.Tv) == CecSharp.CecPowerStatus.InTransitionStandbyToOn)) CEC_MapperThread.getInstance().Mapper.Worker.Receiver.StandByDevice(CecSharp.CecLogicalAddress.Tv); else if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null) CEC_MapperThread.getInstance().Mapper.Worker.Receiver.WakeDevice(CecSharp.CecLogicalAddress.Tv); break;
+                case "_btnTV": if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null && (CEC_MapperThread.getInstance().Mapper.Worker.Receiver.PowerStatus(CecSharp.CecLogicalAddress.Tv) == CecSharp.CecPowerStatus.On || CEC_MapperThread.getInstance().Mapper.Worker.Receiver.PowerStatus(CecSharp.CecLogicalAddress.Tv) == CecSharp.CecPowerStatus.InTransitionStandbyToOn)) CEC_MapperThread.getInstance().Mapper.Worker.Receiver.StandByDevice(CecSharp.CecLogicalAddress.Tv); else if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null) { CEC_MapperThread.getInstance().Mapper.Worker.Receiver.WakeDevice(CecSharp.CecLogicalAddress.Tv); CEC_MapperThread.getInstance().Mapper.Worker.Receiver.WakeDevice(CecSharp.CecLogicalAddress.AudioSystem); } break;
                 case "_btnHTPC": if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver.IsActiveSource()) CEC_MapperThread.getInstance().Mapper.Worker.Receiver.SetSource(false); else if (CEC_MapperThread.getInstance().Mapper != null && CEC_MapperThread.getInstance().Mapper.Worker != null && CEC_MapperThread.getInstance().Mapper.Worker.Receiver != null) CEC_MapperThread.getInstance().Mapper.Worker.Receiver.SetSource(true); break;
             }
+        }
+
+        private void frmControl_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _timer.Enabled = false;
+        }
+
+        private void frmControl_Shown(object sender, EventArgs e)
+        {
+            _timer.Enabled = true;
         }
     }
 }

@@ -116,9 +116,15 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                         {
                             Keys key = map.Keyboard_Key.Keys;
+                            if ((key & Keys.Shift) == Keys.Shift)
+                                key = key ^ Keys.Shift;
+                            if ((key & Keys.Alt) == Keys.Alt)
+                                key = key ^ Keys.Alt;
+                            if ((key & Keys.Control) == Keys.Control)
+                                key = key ^ Keys.Control;
                             entry = ((Keys)((int)key)).ToString() + " [" + ((int)key).ToString() + "]";
                         }
                     }
@@ -131,7 +137,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                         {
                             Keys key = map.Keyboard_Key.Keys;
                             if ((key & Keys.Alt) == Keys.Alt)
@@ -147,7 +153,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                         {
                             Keys key = map.Keyboard_Key.Keys;
                             if ((key & Keys.Shift) == Keys.Shift)
@@ -163,7 +169,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                         {
                             Keys key = map.Keyboard_Key.Keys;
                             if ((key & Keys.Control) == Keys.Control)
@@ -171,6 +177,20 @@ namespace billy_boy.CEC_Mapper
                         }
                     }
                     return entry;
+                };
+            _column_KMKL_KeyboardKeyMode.AspectGetter =
+                delegate(Object x)
+                {
+                    String mode = "KeyPress";
+                    CEC_KeyMap map = x as CEC_KeyMap;
+                    if (map != null)
+                    {
+                        if (map.Keyboard_Key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyDownUp)
+                        {
+                            mode = "KeyDown, KeyUp";
+                        }
+                    }
+                    return mode;
                 };
 
             //KMML
@@ -192,7 +212,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Makro)
                         {
                             ProcessStartInfo psi = map.Keyboard_Key.Makro;
                             entry = psi.FileName;
@@ -207,7 +227,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Makro)
                         {
                             ProcessStartInfo psi = map.Keyboard_Key.Makro;
                             entry = psi.Arguments;
@@ -222,7 +242,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Makro)
                         {
                             ProcessStartInfo psi = map.Keyboard_Key.Makro;
                             entry = psi.CreateNoWindow;
@@ -237,7 +257,7 @@ namespace billy_boy.CEC_Mapper
                     CEC_KeyMap map = x as CEC_KeyMap;
                     if (map != null)
                     {
-                        if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro)
+                        if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Makro)
                         {
                             ProcessStartInfo psi = map.Keyboard_Key.Makro;
                             entry = psi.WindowStyle.ToString();
@@ -356,7 +376,10 @@ namespace billy_boy.CEC_Mapper
         private void _btnProcessDelete_Click(object sender, EventArgs e)
         {
             if (_lstProcessView.SelectedObjects.Count <= 0)
+            {
+                MessageBox.Show(this, "Please select a process.", "Delete a process", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
             CEC_Process process = _lstProcessView.SelectedObjects[0] as CEC_Process;
             if (process != null)
                 DeleteProcess(process);
@@ -365,7 +388,10 @@ namespace billy_boy.CEC_Mapper
         private void _btnKeyMapAdd_Click(object sender, EventArgs e)
         {
             if (_lstProcessView.SelectedObjects.Count <= 0)
+            {
+                MessageBox.Show(this, "Please select a process.", "Add a keymap", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
             CEC_Process process = _lstProcessView.SelectedObjects[0] as CEC_Process;
             if (process != null)
                 AddKeyMap(process);
@@ -373,7 +399,32 @@ namespace billy_boy.CEC_Mapper
 
         private void _btnKeyMapDelete_Click(object sender, EventArgs e)
         {
+            if (_lstProcessView.SelectedObjects.Count <= 0)
+            {
+                MessageBox.Show(this, "Please select a process.", "Delete a keymap", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            CEC_Process process = _lstProcessView.SelectedObjects[0] as CEC_Process;
 
+            if (_lstKeyMapKeyList.SelectedObjects.Count <= 0 && _lstKeyMapMakroList.SelectedObjects.Count <= 0)
+            {
+                MessageBox.Show(this, "Please select either a keymap key or a keymap macro.", "Delete a keymap", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (_lstKeyMapKeyList.SelectedObjects.Count > 0 && _lstKeyMapMakroList.SelectedObjects.Count > 0)
+            {
+                MessageBox.Show(this, "Please select only a keymap key OR a keymap macor, not both.", "Delete a keymap", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            CEC_KeyMap keyMap = null;
+            if (_lstKeyMapKeyList.SelectedObjects.Count > 0)
+                keyMap = _lstKeyMapKeyList.SelectedObjects[0] as CEC_KeyMap;
+            else if (_lstKeyMapMakroList.SelectedObjects.Count > 0)
+                keyMap = _lstKeyMapMakroList.SelectedObjects[0] as CEC_KeyMap;
+
+            if (process != null && keyMap != null)
+                DeleteKeyMap(process,keyMap);
         }
 
         private void _lstKeyMapKeyList_SelectionChanged(object sender, EventArgs e)

@@ -45,7 +45,7 @@ namespace billy_boy.CEC_Objects
 
         public CEC_KeyMap getMapping(int cec_key)
         {
-            return _keyMappingList[cec_key];
+            return _keyMappingList[(short)cec_key];
         }
 
         public bool hasMapping(int cec_key)
@@ -55,7 +55,7 @@ namespace billy_boy.CEC_Objects
 
         public CEC_EventMap getEventMapping(billy_boy.CEC_Objects.CEC_Enums.CEC_Event cec_event)
         {
-            return _eventMappingList[cec_event];
+            return _eventMappingList[(short)cec_event];
         }
 
         public bool hasEventMapping(billy_boy.CEC_Objects.CEC_Enums.CEC_Event cec_event)
@@ -105,9 +105,16 @@ namespace billy_boy.CEC_Objects
             foreach (CEC_KeyMap map in _keyMappingList)
             {
                 ret += map.CEC_Key.ToString() + "=";
-                if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                 {
-                    ret += (int)map.Keyboard_Key.Keys + (((map.Keyboard_Key.Keys & Keys.Shift) == Keys.Shift) ? ",Shift" : "") + (((map.Keyboard_Key.Keys & Keys.Alt) == Keys.Alt) ? ",Alt" : "") + (((map.Keyboard_Key.Keys & Keys.Control) == Keys.Control) ? ",Control" : "") + "\r\n";
+                    Keys key = map.Keyboard_Key.Keys;
+                    if ((key & Keys.Shift) == Keys.Shift)
+                        key = key ^ Keys.Shift;
+                    if ((key & Keys.Alt) == Keys.Alt)
+                        key = key ^ Keys.Alt;
+                    if ((key & Keys.Control) == Keys.Control)
+                        key = key ^ Keys.Control;
+                    ret += (int)key + (((map.Keyboard_Key.Keys & Keys.Shift) == Keys.Shift) ? ",Shift" : "") + (((map.Keyboard_Key.Keys & Keys.Alt) == Keys.Alt) ? ",Alt" : "") + (((map.Keyboard_Key.Keys & Keys.Control) == Keys.Control) ? ",Control" : "") + ((map.Keyboard_Key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyDownUp) ? ",KeyDownUp" : "") + "\r\n";
                 }
                 else
                 {
@@ -118,7 +125,7 @@ namespace billy_boy.CEC_Objects
             foreach (CEC_EventMap map in _eventMappingList)
             {
                 ret += map.CEC_Event.ToString() + "=";
-                if (map.Keyboard_Key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key)
+                if (map.Keyboard_Key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key)
                 {
                     ret += (int)map.Keyboard_Key.Keys + (((map.Keyboard_Key.Keys & Keys.Shift) == Keys.Shift) ? ",Shift" : "") + (((map.Keyboard_Key.Keys & Keys.Alt) == Keys.Alt) ? ",Alt" : "") + (((map.Keyboard_Key.Keys & Keys.Control) == Keys.Control) ? ",Control" : "") + "\r\n";
                 }

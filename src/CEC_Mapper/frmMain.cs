@@ -88,6 +88,17 @@ namespace billy_boy.CEC_Mapper
             else if (_controlFrm != null)
                 _controlFrm.Close();
         }
+
+        private void reloadConfigurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CEC_MapperThread.getInstance().Mapper.ReInit();
+        }
+
+        private void restartHDMIReceiverToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CEC_MapperThread.getInstance().Stop();
+            CEC_MapperThread.getInstance().Start();
+        }
     }
 
 }

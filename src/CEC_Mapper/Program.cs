@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.VisualBasic.ApplicationServices;
 
 // Configure log4net using the .config file
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
@@ -16,6 +17,33 @@ namespace billy_boy.CEC_Mapper
  
         static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            SingleInstanceController controller = new SingleInstanceController();
+            controller.Run(args);
+        }
+    }
+
+    public class SingleInstanceController : WindowsFormsApplicationBase
+    {
+        // Create a logger for use in this class
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public SingleInstanceController()
+        {
+            IsSingleInstance = true;
+            StartupNextInstance += this_StartupNextInstance;
+        }
+
+        void this_StartupNextInstance(object sender, StartupNextInstanceEventArgs e)
+        {
+            //frmMain form = MainForm as frmMain;
+            if (log.IsDebugEnabled) log.Debug("User started application even it's running allread... Parsing command line for commands...");
+            CEC_ArgumentParser.parse(e.CommandLine);
+        }
+
+        protected override void OnCreateMainForm()
+        {
             try
             {
                 if (!File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "LibCecSharp.dll")) || !File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "libcec.dll")))
@@ -27,16 +55,14 @@ namespace billy_boy.CEC_Mapper
                     }
                 }
                 CEC_MapperThread.getInstance().Start();
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new frmMain());
             }
             catch (Exception ex)
             {
                 MessageBox.Show("The application has crashed. Informations are below.\r\n\r\n"+ex.Message, "HDMI CEC Mapper - Application crash", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (log.IsErrorEnabled) log.Error("Application crashed. Reason: " + ex.Message + "");
             }
+            if (log.IsDebugEnabled) log.Debug("SingleInstanceController has been started.");
+            MainForm = new frmMain();
         }
-
     }
 }

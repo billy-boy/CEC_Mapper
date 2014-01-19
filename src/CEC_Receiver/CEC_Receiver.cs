@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using CecSharp;
 
@@ -136,7 +137,7 @@ namespace billy_boy.CEC_Receiver
             {
                 if (log.IsDebugEnabled) log.Debug("HDMI CEC command: user control pressed.");               
             }
-            // Fix for some play/stop keys
+            // If the operator mode is Play/DeckControl
             else if ((command.Opcode == CecOpcode.Play || command.Opcode == CecOpcode.DeckControl)
                 && command.Initiator == CecLogicalAddress.Tv && command.Parameters.Size == 1)
             {
@@ -160,47 +161,65 @@ namespace billy_boy.CEC_Receiver
                     //KeyPress((int)CecUserControlCode.Stop);
                 }
             }
-            else if (command.Opcode == CecOpcode.Standby && command.Initiator == CecLogicalAddress.Tv)
+            else if (command.Opcode == CecOpcode.Standby)
             {
-                if (log.IsDebugEnabled) log.Debug("HDMI CEC command: TV standby.");
-
-                //if (_cecConfig.SendTvPowerOff)
-                //{
-                //    if (_cecConfig.SendTvPowerOffOnlyIfActiveSource && !_lib.IsLibCECActiveSource())
-                //    {
-                //        if (log.IsDebugEnabled) log.Debug("TVPowerOff button not sent, MediaPortal active source state is: " + _lib.IsLibCECActiveSource().ToString());
-                //    }
-                //    else
-                //    {
-                //        if (log.IsDebugEnabled) log.Debug("TVPowerOff button sent.");
-                        //KeyPress((int)CecUserControlCode.PowerOffFunction);
-                //    }
-                //}
+                if (log.IsDebugEnabled) log.Debug("HDMI CEC command: Device ["+command.Initiator.ToString()+"] standby.");
+                if (command.Initiator == CecLogicalAddress.Tv)
+                {
+                    if (log.IsInfoEnabled) log.Info("HDMI CEC command: TV standby.");
+                }
+                //Raise an own event
+                if (OnStandby != null)
+                {
+                    OnStandby(this, new CEC_StandbyEventArgs { Device = command.Initiator });
+                }
+                //KeyPress of -> KeyCode = (Int32)CecUserControlCode.PowerOffFunction
+            }
+            else if (command.Opcode == CecOpcode.ReportPowerStatus && command.Parameters.Size > 0)
+            {
+                if (log.IsDebugEnabled) log.Debug("HDMI CEC command: power status changed event. Device: [" + command.Initiator.ToString() + "] Status: [" + command.Parameters.Data[0].ToString()+ "]");
+                //Raise an own event
+                if (OnPowerStateChanged != null)
+                {
+                    OnPowerStateChanged(this, new CEC_PowerStatusChangedEventArgs { Device = command.Initiator, PowerStatus = command.Parameters.Data[0] });
+                }
+                //Wake up or standby specified devices (0x00 = On, 0x01 = Standby, 0x02 = Standby->On, 0x03 = On->Standby)
+                //if (command.Initiator == CecLogicalAddress.Tv && (command.Parameters.Data[0] == 0x01 || command.Parameters.Data[0] == 0x03))
+                //    standbyOtherDevices();
+                //else if (command.Initiator == CecLogicalAddress.Tv && (command.Parameters.Data[0] == 0x00 ||command.Parameters.Data[0] == 0x02))
+                //    wakeUpOtherDevices();
             }
 
 
-            //Debug logging
+            #region Debug logging
+
             string opcode = String.Empty;
             string param = String.Empty;
 
             if (command.OpcodeSet)
             {
-                opcode = command.Opcode.ToString();
+                opcode = command.Opcode.ToString() + " (" + ((Int32)command.Opcode).ToString()+")";
             }
+            else
+                opcode = "POLL (no opcode set)";
 
             for (short i = 0; i < command.Parameters.Size; i++)
             {
                 param += String.Format("{0:X}", command.Parameters.Data[i]);
             }
 
-            string msg = "HDMI CEC command: [" + opcode+"]";
+            string msg = "HDMI CEC command: [" + opcode + "] from: ["+command.Initiator.ToString()+"] to: ["+command.Destination.ToString()+"]";
 
             if (param.Length > 0)
             {
-                msg += " Parameters: [" + param+"]";
+                msg += " parameters: [" + param+"]";
             }
 
+            msg += "ACK? [" + command.Ack + "] EOM? [" + command.Eom.ToString() + "]";
+
             if (log.IsDebugEnabled) log.Debug(msg);
+
+            #endregion
 
             return 1;
         }
@@ -211,9 +230,11 @@ namespace billy_boy.CEC_Receiver
             if (log.IsDebugEnabled) log.Debug(String.Format("HDMI CEC key press event: Button: [{0}] Code: [{1}] Duration: [{2}]", key.Keycode.ToString(), keyCode, key.Duration));
 
             //Raise an own event
-            if (OnKeyPress != null && !key.Empty && key.Duration > 0)
+            if (OnKeyPress != null && !key.Empty)
             {
-                OnKeyPress(this, new CEC_KeyPressEventArgs { KeyCode = (Int32)key.Keycode });
+                bool keyDown = false;
+                if (key.Duration <= 0) keyDown = true;
+                OnKeyPress(this, new CEC_KeyPressEventArgs { KeyCode = (Int32)key.Keycode, KeyDown = keyDown });
             }
             return 1;
         }
@@ -406,9 +427,85 @@ namespace billy_boy.CEC_Receiver
 
         public bool IsActiveSource()
         {
-            bool res = _lib.IsLibCECActiveSource();
-            if (log.IsDebugEnabled) log.Debug("Is [libCEC] active source? " + (res ? "Yes." : "No/Unknown."));
+            bool res = IsActiveSource(_lib.GetLogicalAddresses().Primary);
+            //if (log.IsDebugEnabled) log.Debug("Is [libCEC] active source? " + (res ? "Yes." : "No/Unknown."));
             return res;
+        }
+
+        #endregion
+
+        #region Special operations
+
+        private void wakeUpOtherDevices()
+        {
+            String file = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory,"powerList.cfg");
+            if (!File.Exists(file))
+            {
+                if (log.IsErrorEnabled) log.Error("Failed to load wake up config file. File [" + file + "] was not found.");
+                return;
+            }
+
+            StreamReader str = new StreamReader(file);
+            String line;
+            while ((line = str.ReadLine()) != null)
+            {
+                if (line.Contains("="))
+                {
+                    String[] spl = line.Split('=');
+                    if (spl.Length >= 2)
+                    {
+                        switch (spl[0].Trim())
+                        {
+                            case "WakeUp":
+                                String[] devices = spl[1].Trim().Split(',');
+                                foreach (String device in devices)
+                                {
+                                    Int32 deviceAddress = -1;
+                                    if (Int32.TryParse(device.Trim(), out deviceAddress))
+                                        WakeDevice((CecLogicalAddress)deviceAddress);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            str.Close();
+        }
+
+        private void standbyOtherDevices()
+        {
+            String file = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "powerList.cfg");
+            if (!File.Exists(file))
+            {
+                if (log.IsErrorEnabled) log.Error("Failed to load standby config file. File [" + file + "] was not found.");
+                return;
+            }
+
+            StreamReader str = new StreamReader(file);
+            String line;
+            while ((line = str.ReadLine()) != null)
+            {
+                if (line.Contains("="))
+                {
+                    String[] spl = line.Split('=');
+                    if (spl.Length >= 2)
+                    {
+                        switch (spl[0].Trim())
+                        {
+                            case "Standby":
+                                String[] devices = spl[1].Trim().Split(',');
+                                foreach (String device in devices)
+                                {
+                                    Int32 deviceAddress = -1;
+                                    if (Int32.TryParse(device.Trim(), out deviceAddress))
+                                        StandByDevice((CecLogicalAddress)deviceAddress);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            str.Close();
         }
 
         #endregion
@@ -422,8 +519,7 @@ namespace billy_boy.CEC_Receiver
         {
             return _lib.GetDeviceVendorId(address);
         }
-
-
+        
         /// <summary>
         /// Internal connection state. Better use active connection check via Ping()
         /// </summary>
@@ -473,6 +569,12 @@ namespace billy_boy.CEC_Receiver
 
         public event SourceActivatedEventHandler OnSourceActivated = null;
         public delegate void SourceActivatedEventHandler(object sender, CEC_SourceActivatedEventArgs e);
+
+        public event StandbyEventHandler OnStandby = null;
+        public delegate void StandbyEventHandler(object sender, CEC_StandbyEventArgs e);
+
+        public event PowerStatusChangedEventHandler OnPowerStateChanged = null;
+        public delegate void PowerStatusChangedEventHandler(object sender, CEC_PowerStatusChangedEventArgs e);
 
         #endregion
 

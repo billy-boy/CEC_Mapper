@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace billy_boy.CEC_Receiver
 {
-    public class CEC_Worker
+    public class CEC_ReceiverThread
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private volatile bool _shouldStop = false;
@@ -13,21 +13,38 @@ namespace billy_boy.CEC_Receiver
 
         private CEC_Receiver _receiver = null;
 
-        public CEC_Worker()
+        public CEC_ReceiverThread()
         {
-            if (log.IsDebugEnabled) log.Debug("worker thread: inititalising...");
+            Init();
+        }
+
+        private void Init()
+        {
+            if (log.IsDebugEnabled) log.Debug("receiver thread: inititalising...");
             _receiver = new CEC_Receiver();
             _receiver.OnKeyPress += ReceiverOnKeyPress;
             _receiver.OnSourceActivated += ReceiverOnSourceActivated;
+            _receiver.OnStandby += ReceiverOnStandby;
             if (_receiver.Start())
             {
-                if (log.IsDebugEnabled) log.Debug("worker thread: started CEC receiver.");
+                if (log.IsDebugEnabled) log.Debug("receiver thread: started CEC receiver.");
             }
             else
-                if (log.IsErrorEnabled) log.Error("worker thread: could not startup CEC receiver.");
+                if (log.IsErrorEnabled) log.Error("receiver thread: could not startup CEC receiver.");
         }
 
         #region Receiver event handling
+
+        private void ReceiverOnStandby(object sender, CEC_StandbyEventArgs e)
+        {
+            if (log.IsInfoEnabled) log.Info("CEC receiver raised standby event: device: ["+e.Device.ToString()+"]");
+
+            //Raise an own event
+            if (OnStandby != null)
+            {
+                OnStandby(this, new CEC_StandbyEventArgs { Device = e.Device });
+            }
+        }
 
         private void ReceiverOnSourceActivated(object sender, CEC_SourceActivatedEventArgs e)
         {
@@ -47,13 +64,13 @@ namespace billy_boy.CEC_Receiver
             //Raise an own event
             if (OnKeyPress != null)
             {
-                OnKeyPress(this, new CEC_KeyPressEventArgs { KeyCode = e.KeyCode });
+                OnKeyPress(this, new CEC_KeyPressEventArgs { KeyCode = e.KeyCode, KeyDown = e.KeyDown });
             }
         }
 
         #endregion
 
-        ~CEC_Worker()
+        ~CEC_ReceiverThread()
         {
             Stop();
         }
@@ -69,11 +86,18 @@ namespace billy_boy.CEC_Receiver
             while (!_shouldStop)
             {
                 //if (log.IsDebugEnabled) log.Debug("worker thread: working...");
-                CheckAlive();
+                try
+                {
+                    CheckAlive();
+                }
+                catch (Exception ex)
+                {
+                    if (log.IsErrorEnabled) log.Error("Error in receiver thread's check alive: "+ex.Message);
+                }
                 Thread.Sleep(5000);
             }
             Stop();
-            if (log.IsDebugEnabled) log.Debug("worker thread terminated gracefully.");
+            if (log.IsDebugEnabled) log.Debug("receiver thread terminated gracefully.");
         }
 
         private void CheckAlive()
@@ -82,7 +106,7 @@ namespace billy_boy.CEC_Receiver
             while (!_shouldStop && (!_receiver.Connected || !_receiver.Ping()))
             {
                 _connected = false;
-                if (log.IsWarnEnabled) log.Warn("worker thread: receiver lost connection to adapter. Try to restart.");
+                if (log.IsWarnEnabled) log.Warn("receiver thread: receiver lost connection to adapter. Try to restart.");
                 _receiver.Start();
                 Thread.Sleep(CEC_Config.ConnectionTimeout);
             }
@@ -97,7 +121,7 @@ namespace billy_boy.CEC_Receiver
             }
             _connected = false;
             _receiver = null;
-            if (log.IsDebugEnabled) log.Debug("Stoped the worker thread.");
+            if (log.IsDebugEnabled) log.Debug("Stoped the receiver thread.");
         }
 
         public bool Connected { get { return _connected;  } }
@@ -108,6 +132,9 @@ namespace billy_boy.CEC_Receiver
 
         public event KeyPressEventHandler OnKeyPress = null;
         public delegate void KeyPressEventHandler(object sender, CEC_KeyPressEventArgs e);
+
+        public event StandbyEventHandler OnStandby = null;
+        public delegate void StandbyEventHandler(object sender, CEC_StandbyEventArgs e);
 
         public event SourceActivatedEventHandler OnSourceActivated = null;
         public delegate void SourceActivatedEventHandler(object sender, CEC_SourceActivatedEventArgs e);

@@ -96,6 +96,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CEC_ArgumentParser.cs" />
+    <Compile Include="CEC_Config.cs" />
     <Compile Include="CEC_KeySender.cs" />
     <Compile Include="CEC_Mapper.cs" />
     <Compile Include="CEC_MapperThread.cs" />

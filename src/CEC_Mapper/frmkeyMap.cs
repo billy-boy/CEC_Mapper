@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace billy_boy.CEC_Mapper
 {
@@ -38,6 +39,14 @@ namespace billy_boy.CEC_Mapper
                     _cmbWindowState.SelectedItem = index;
             }
 
+            _cmbKeyboardKeyMode.Items.Clear();
+            foreach (CEC_Enums.CEC_KeyPressMode mode in Enum.GetValues(typeof(CEC_Enums.CEC_KeyPressMode)))
+            {
+                int index = _cmbKeyboardKeyMode.Items.Add(mode);
+                if (mode  == CEC_Enums.CEC_KeyPressMode.KeyPress)
+                    _cmbKeyboardKeyMode.SelectedItem = index;
+            }
+
             keyEnabled(true);
             macroEnabled(false);
         }
@@ -49,6 +58,8 @@ namespace billy_boy.CEC_Mapper
             _chk_Shift.Visible = enabled;
             _chkCtrl.Visible = enabled;
             _lbl_KeyboardKey.Visible = enabled;
+            _cmbKeyboardKeyMode.Visible = enabled;
+            _btnKeyHelp.Visible = enabled;
         }
 
         private void macroEnabled(bool enabled)
@@ -77,7 +88,13 @@ namespace billy_boy.CEC_Mapper
                 Int32 keyCode = 0;
                 if (!Int32.TryParse(_txt_KeyboardKey.Text.Trim(), out keyCode))
                 {
-                    MessageBox.Show(this, "The keyboard key must be entered as it's Int32 value.\r\nPlease read the ReadMe file.", "Add a new key map", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, "The keyboard key must be entered as it's 32-bit Integer value.\r\nPlease read the ReadMe file.", "Add a new key map", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (_cmbKeyboardKeyMode.SelectedItem == null)
+                {
+                    MessageBox.Show(this, "Please select a keyboard key mode.\r\nPlease read the ReadMe file.", "Add a new key map", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
                 }
                 Keys key = (Keys)keyCode;
                 if (_chk_Shift.Checked)
@@ -86,13 +103,13 @@ namespace billy_boy.CEC_Mapper
                     key = key | Keys.Alt;
                 if (_chkCtrl.Checked)
                     key = key | Keys.Control;
-                keyboardKey = new CEC_KeyboardKey(key);
+                keyboardKey = new CEC_KeyboardKey(key,(CEC_Enums.CEC_KeyPressMode)_cmbKeyboardKeyMode.SelectedItem);
             }
             else if (_radio_Macro.Checked)
             {
                 ProcessStartInfo psi = new ProcessStartInfo();
                 psi.FileName = _txtFile.Text;
-                psi.Arguments = _txtFile.Text;
+                psi.Arguments = _txtArguments.Text;
                 psi.CreateNoWindow = _chkCreateNoWindow.Checked;
                 psi.WindowStyle = (ProcessWindowStyle)_cmbWindowState.SelectedItem;
                 keyboardKey = new CEC_KeyboardKey(psi);
@@ -134,13 +151,23 @@ namespace billy_boy.CEC_Mapper
                 DialogResult = DialogResult.OK;
                 Close();
             }
-            MessageBox.Show(this, "Could not save. Please check your settings.", "Add a new key map", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                MessageBox.Show(this, "Could not save. Please check your settings.", "Add a new key map", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public CEC_KeyMap KeyMap { get { return _map;  } }
 
         private void _txt_KeyboardKey_KeyPress(object sender, KeyPressEventArgs e)
         {
+        }
+
+        private void _btnKeyHelp_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, @"key_check.exe")))
+            {
+                ProcessStartInfo psi = new ProcessStartInfo(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, @"key_check.exe"));
+                Process.Start(psi);
+            }
         }
     }
 }

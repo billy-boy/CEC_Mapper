@@ -46,6 +46,9 @@
             this._lblWindowState = new System.Windows.Forms.Label();
             this._chkCreateNoWindow = new System.Windows.Forms.CheckBox();
             this._btnOk = new System.Windows.Forms.Button();
+            this._cmbKeyboardKeyMode = new System.Windows.Forms.ComboBox();
+            this._lblKeyboardKeyMode = new System.Windows.Forms.Label();
+            this._btnKeyHelp = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // _lbl_CECKey
@@ -139,7 +142,7 @@
             // _lblFile
             // 
             this._lblFile.AutoSize = true;
-            this._lblFile.Location = new System.Drawing.Point(14, 140);
+            this._lblFile.Location = new System.Drawing.Point(10, 167);
             this._lblFile.Name = "_lblFile";
             this._lblFile.Size = new System.Drawing.Size(79, 13);
             this._lblFile.TabIndex = 11;
@@ -147,7 +150,7 @@
             // 
             // _txtFile
             // 
-            this._txtFile.Location = new System.Drawing.Point(103, 137);
+            this._txtFile.Location = new System.Drawing.Point(99, 164);
             this._txtFile.Name = "_txtFile";
             this._txtFile.Size = new System.Drawing.Size(200, 20);
             this._txtFile.TabIndex = 10;
@@ -155,7 +158,7 @@
             // _lblArguments
             // 
             this._lblArguments.AutoSize = true;
-            this._lblArguments.Location = new System.Drawing.Point(14, 166);
+            this._lblArguments.Location = new System.Drawing.Point(10, 193);
             this._lblArguments.Name = "_lblArguments";
             this._lblArguments.Size = new System.Drawing.Size(60, 13);
             this._lblArguments.TabIndex = 13;
@@ -163,7 +166,7 @@
             // 
             // _txtArguments
             // 
-            this._txtArguments.Location = new System.Drawing.Point(103, 163);
+            this._txtArguments.Location = new System.Drawing.Point(99, 190);
             this._txtArguments.Name = "_txtArguments";
             this._txtArguments.Size = new System.Drawing.Size(200, 20);
             this._txtArguments.TabIndex = 12;
@@ -171,7 +174,7 @@
             // _cmbWindowState
             // 
             this._cmbWindowState.FormattingEnabled = true;
-            this._cmbWindowState.Location = new System.Drawing.Point(101, 189);
+            this._cmbWindowState.Location = new System.Drawing.Point(97, 216);
             this._cmbWindowState.Name = "_cmbWindowState";
             this._cmbWindowState.Size = new System.Drawing.Size(200, 21);
             this._cmbWindowState.TabIndex = 15;
@@ -179,7 +182,7 @@
             // _lblWindowState
             // 
             this._lblWindowState.AutoSize = true;
-            this._lblWindowState.Location = new System.Drawing.Point(12, 192);
+            this._lblWindowState.Location = new System.Drawing.Point(8, 219);
             this._lblWindowState.Name = "_lblWindowState";
             this._lblWindowState.Size = new System.Drawing.Size(75, 13);
             this._lblWindowState.TabIndex = 14;
@@ -188,7 +191,7 @@
             // _chkCreateNoWindow
             // 
             this._chkCreateNoWindow.AutoSize = true;
-            this._chkCreateNoWindow.Location = new System.Drawing.Point(103, 216);
+            this._chkCreateNoWindow.Location = new System.Drawing.Point(99, 243);
             this._chkCreateNoWindow.Name = "_chkCreateNoWindow";
             this._chkCreateNoWindow.Size = new System.Drawing.Size(111, 17);
             this._chkCreateNoWindow.TabIndex = 16;
@@ -197,7 +200,7 @@
             // 
             // _btnOk
             // 
-            this._btnOk.Location = new System.Drawing.Point(17, 239);
+            this._btnOk.Location = new System.Drawing.Point(13, 266);
             this._btnOk.Name = "_btnOk";
             this._btnOk.Size = new System.Drawing.Size(284, 23);
             this._btnOk.TabIndex = 17;
@@ -205,11 +208,41 @@
             this._btnOk.UseVisualStyleBackColor = true;
             this._btnOk.Click += new System.EventHandler(this._btnOk_Click);
             // 
+            // _cmbKeyboardKeyMode
+            // 
+            this._cmbKeyboardKeyMode.FormattingEnabled = true;
+            this._cmbKeyboardKeyMode.Location = new System.Drawing.Point(99, 137);
+            this._cmbKeyboardKeyMode.Name = "_cmbKeyboardKeyMode";
+            this._cmbKeyboardKeyMode.Size = new System.Drawing.Size(200, 21);
+            this._cmbKeyboardKeyMode.TabIndex = 19;
+            // 
+            // _lblKeyboardKeyMode
+            // 
+            this._lblKeyboardKeyMode.AutoSize = true;
+            this._lblKeyboardKeyMode.Location = new System.Drawing.Point(10, 140);
+            this._lblKeyboardKeyMode.Name = "_lblKeyboardKeyMode";
+            this._lblKeyboardKeyMode.Size = new System.Drawing.Size(42, 13);
+            this._lblKeyboardKeyMode.TabIndex = 18;
+            this._lblKeyboardKeyMode.Text = "Modus:";
+            // 
+            // _btnKeyHelp
+            // 
+            this._btnKeyHelp.Location = new System.Drawing.Point(231, 91);
+            this._btnKeyHelp.Name = "_btnKeyHelp";
+            this._btnKeyHelp.Size = new System.Drawing.Size(70, 40);
+            this._btnKeyHelp.TabIndex = 20;
+            this._btnKeyHelp.Text = "Help";
+            this._btnKeyHelp.UseVisualStyleBackColor = true;
+            this._btnKeyHelp.Click += new System.EventHandler(this._btnKeyHelp_Click);
+            // 
             // frmkeyMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(315, 278);
+            this.ClientSize = new System.Drawing.Size(315, 302);
+            this.Controls.Add(this._btnKeyHelp);
+            this.Controls.Add(this._cmbKeyboardKeyMode);
+            this.Controls.Add(this._lblKeyboardKeyMode);
             this.Controls.Add(this._btnOk);
             this.Controls.Add(this._chkCreateNoWindow);
             this.Controls.Add(this._cmbWindowState);
@@ -256,5 +289,8 @@
         private System.Windows.Forms.Label _lblWindowState;
         private System.Windows.Forms.CheckBox _chkCreateNoWindow;
         private System.Windows.Forms.Button _btnOk;
+        private System.Windows.Forms.ComboBox _cmbKeyboardKeyMode;
+        private System.Windows.Forms.Label _lblKeyboardKeyMode;
+        private System.Windows.Forms.Button _btnKeyHelp;
     }
 }

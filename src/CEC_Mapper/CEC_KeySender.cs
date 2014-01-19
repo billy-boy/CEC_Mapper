@@ -158,44 +158,90 @@ namespace billy_boy.CEC_Mapper
         /// Send the corresponding keyboard key detected from config to a given CEC key to the foreground window (if that is in config)
         /// </summary>
         /// <param name="cec_key">CEC keycode to lookup</param>
-        public static void SendMapingKey(int cec_key)
+        public static void SendMapingKey(billy_boy.CEC_Receiver.CEC_KeyPressEventArgs e)
         {
             String foregroundProcess = getForegroundProcessName();
-            if (log.IsDebugEnabled) log.Debug("Actual Windows foreground window's process name [" + foregroundProcess + "]. Check for existing KeyMap for [" + foregroundProcess.ToLower().Trim() + "].");
-            CEC_Process process = CEC_ProcessList.getInstance()[foregroundProcess.ToLower().Trim()];
+            if (log.IsDebugEnabled) log.Debug("Actual Windows foreground window's process name [" + foregroundProcess + "]. Check for existing KeyMap for [" + foregroundProcess.Trim() + "].");
+            foregroundProcess = foregroundProcess.Trim();
+            CEC_Process process = CEC_ProcessList.getInstance()[foregroundProcess];
             if (process == null)
             {
-                if (log.IsWarnEnabled) log.Warn("Received CEC key input ["+cec_key.ToString()+"]. No KeyMap found for foreground process ["+foregroundProcess.ToLower().Trim()+"]. Exiting.");
-                return;
+                if (log.IsWarnEnabled) log.Warn("Received CEC key input: [" + e.KeyCode.ToString() + "] key pressed type: [" + (e.KeyDown ? "down" : "up") + "]. No KeyMap found for foreground process [" + foregroundProcess + "].");
+                if (CEC_Config.UseDefaultOnProcessNotFound)
+                {
+                    process = CEC_ProcessList.getInstance()[CEC_Config.DefaultProcess];
+                    if (log.IsInfoEnabled) log.Info("Usage of default process enabled. Using KeyMap of [" + process + "].");
+                }
+                if (process == null)
+                {
+                    if (log.IsWarnEnabled) log.Warn("No KeyMap. Exiting.");
+                    return;
+                }
             }
-            CEC_KeyboardKey keyboard_key = process.getMapping(cec_key).Keyboard_Key;
-            if (keyboard_key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Key) SendKey(cec_key, keyboard_key, foregroundProcess);
-            else if (keyboard_key.Type == CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro) RunMakro(cec_key, keyboard_key, foregroundProcess);
+            CEC_KeyMap keyMap = process.getMapping(e.KeyCode);
+            if (keyMap == null)
+            {
+                if (log.IsWarnEnabled) log.Warn("Received CEC key input: [" + e.KeyCode.ToString() + "] key pressed type: [" + (e.KeyDown ? "down" : "up") + "]. No KeyMap found for this key ["+((Int32)e.KeyCode).ToString()+"] for foreground process [" + foregroundProcess + "]. Exiting.");
+                if (CEC_Config.UseDefaultOnKeyMapNotFound)
+                {
+                    process = CEC_ProcessList.getInstance()[CEC_Config.DefaultProcess];
+                    keyMap = process.getMapping(e.KeyCode);
+                    if (log.IsInfoEnabled) log.Info("Usage of default process enabled. Using KeyMap of [" + process + "].");
+                }
+                if (keyMap == null)
+                {
+                    if (log.IsWarnEnabled) log.Warn("No Mapping. Exiting.");
+                    return;
+                }
+            }
+            CEC_KeyboardKey keyboard_key = keyMap.Keyboard_Key;
+            if (keyboard_key.Type == CEC_Enums.CEC_KeyboardKey_Type.Key) SendKey(e, keyboard_key, foregroundProcess);
+            else if (keyboard_key.Type == CEC_Enums.CEC_KeyboardKey_Type.Makro) RunMakro(e, keyboard_key, foregroundProcess);
 
         }
 
-        private static void SendKey(int cec_key, CEC_KeyboardKey keyboard_key, String foregroundProcess)
+        private static void SendKey(billy_boy.CEC_Receiver.CEC_KeyPressEventArgs e, CEC_KeyboardKey keyboard_key, String foregroundProcess)
         {
-            if (keyboard_key.Type != CEC_KeyboardKey.CEC_KeyboardKey_Type.Key) return;
+            //No Key? -> Go away
+            if (keyboard_key.Type != CEC_Enums.CEC_KeyboardKey_Type.Key) return;
+            //KeyDown message from CEC but mode is KeyPress (so we react only to the up message) -> Go away
+            if (keyboard_key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyPress && e.KeyDown) 
+            {
+                if (log.IsDebugEnabled) log.Debug("Exiting method: Mode of this key for this process is [KeyPress] but we received [KeyDown] from CEC. We only react to [KeyUp] in [KeyPress] mode.");
+                return; 
+            }
 
             Keys keyboard_keys = keyboard_key.Keys;
-            if (log.IsInfoEnabled) log.Info("Received CEC key input [" + cec_key.ToString() + "]. Send key [" + keyboard_keys.ToString() + "" + ((keyboard_keys & Keys.Shift) == Keys.Shift ? " + SHIFT" : "") + ((keyboard_keys & Keys.Alt) == Keys.Alt ? " + ALT" : "") + ((keyboard_keys & Keys.Control) == Keys.Control ? " + CTRL" : "") + "] to foreground process [" + foregroundProcess.ToLower().Trim() + "].");
+            if (log.IsInfoEnabled) log.Info("Received CEC key input: [" + e.KeyCode.ToString() + "] key pressed type: [" + (e.KeyDown ? "down" : "up") + "]. Send key [" + keyboard_keys.ToString() + "" + ((keyboard_keys & Keys.Shift) == Keys.Shift ? " + SHIFT" : "") + ((keyboard_keys & Keys.Alt) == Keys.Alt ? " + ALT" : "") + ((keyboard_keys & Keys.Control) == Keys.Control ? " + CTRL" : "") + "] as [" + ((keyboard_key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyPress) ? "KeyPress" : ((e.KeyDown) ? "KeyDown": "KeyUp")) + "] to foreground process [" + foregroundProcess + "].");
 
-            if ((keyboard_keys & Keys.Shift) == Keys.Shift) { InputSimulator.SimulateKeyDown(VirtualKeyCode.SHIFT); }
-            if ((keyboard_keys & Keys.Alt) == Keys.Alt) { InputSimulator.SimulateKeyDown(VirtualKeyCode.MENU); }
-            if ((keyboard_keys & Keys.Control) == Keys.Control) { InputSimulator.SimulateKeyDown(VirtualKeyCode.CONTROL); }
-            InputSimulator.SimulateKeyPress((VirtualKeyCode)(ushort)keyboard_keys);
-            if ((keyboard_keys & Keys.Control) == Keys.Control) { InputSimulator.SimulateKeyUp(VirtualKeyCode.CONTROL); }
-            if ((keyboard_keys & Keys.Alt) == Keys.Alt) { InputSimulator.SimulateKeyUp(VirtualKeyCode.MENU); }
-            if ((keyboard_keys & Keys.Shift) == Keys.Shift) { InputSimulator.SimulateKeyUp(VirtualKeyCode.SHIFT); }
+            //Bei KeyPress-Mode oder einer KeyDown-Message
+            if (keyboard_key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyPress || e.KeyDown == true)
+            {
+                if ((keyboard_keys & Keys.Shift) == Keys.Shift) { InputSimulator.SimulateKeyDown(VirtualKeyCode.SHIFT); }
+                if ((keyboard_keys & Keys.Alt) == Keys.Alt) { InputSimulator.SimulateKeyDown(VirtualKeyCode.MENU); }
+                if ((keyboard_keys & Keys.Control) == Keys.Control) { InputSimulator.SimulateKeyDown(VirtualKeyCode.CONTROL); }
+            }
+            if (keyboard_key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyPress)
+                InputSimulator.SimulateKeyDown((VirtualKeyCode)(ushort)keyboard_keys);
+            else if (e.KeyDown)
+                InputSimulator.SimulateKeyPress((VirtualKeyCode)(ushort)keyboard_keys);
+            else if (!e.KeyDown)
+                InputSimulator.SimulateKeyUp((VirtualKeyCode)(ushort)keyboard_keys);
+            //Bei KeyPress-Mode oder einer KeyUp-Message
+            if (keyboard_key.KeyPressMode == CEC_Enums.CEC_KeyPressMode.KeyPress || e.KeyDown == false)
+            {
+                if ((keyboard_keys & Keys.Control) == Keys.Control) { InputSimulator.SimulateKeyUp(VirtualKeyCode.CONTROL); }
+                if ((keyboard_keys & Keys.Alt) == Keys.Alt) { InputSimulator.SimulateKeyUp(VirtualKeyCode.MENU); }
+                if ((keyboard_keys & Keys.Shift) == Keys.Shift) { InputSimulator.SimulateKeyUp(VirtualKeyCode.SHIFT); }
+            }
         }
 
-        private static void RunMakro(int cec_key, CEC_KeyboardKey keyboard_key, String foregroundProcess)
+        private static void RunMakro(billy_boy.CEC_Receiver.CEC_KeyPressEventArgs e, CEC_KeyboardKey keyboard_key, String foregroundProcess)
         {
-            if (keyboard_key.Type != CEC_KeyboardKey.CEC_KeyboardKey_Type.Makro) return;
+            if (keyboard_key.Type != CEC_Enums.CEC_KeyboardKey_Type.Makro) return;
 
             ProcessStartInfo makro = keyboard_key.Makro;
-            if (log.IsInfoEnabled) log.Info("Received CEC key input [" + cec_key.ToString() + "]. Running makro [" + makro.FileName + "] with args [" + makro.Arguments + "] because of foreground process [" + foregroundProcess.ToLower().Trim() + "].");
+            if (log.IsInfoEnabled) log.Info("Received CEC key input [" + e.KeyCode.ToString() + "]. Running makro [" + makro.FileName + "] with args [" + makro.Arguments + "] because of foreground process [" + foregroundProcess + "].");
             Process.Start(makro);
         }
 

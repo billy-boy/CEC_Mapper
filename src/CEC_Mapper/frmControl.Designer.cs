@@ -246,7 +246,6 @@
             // 
             // _timer
             // 
-            this._timer.Enabled = true;
             this._timer.Interval = 500;
             this._timer.Tick += new System.EventHandler(this._timer_Tick);
             // 
@@ -329,6 +328,8 @@
             this.Name = "frmControl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HDMI CEC Mapper - Control";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmControl_FormClosing);
+            this.Shown += new System.EventHandler(this.frmControl_Shown);
             ((System.ComponentModel.ISupportInitialize)(this._pictMapper)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictReceiver)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictAdapter)).EndInit();

@@ -7,6 +7,7 @@ namespace billy_boy.CEC_Receiver
     public class CEC_KeyPressEventArgs : EventArgs
     {
         public Int32 KeyCode { get; set; }
+        public bool KeyDown { get; set; }       //True -> KeyDown, False -> KeyUp
     }
     
     public enum CEC_LogMessageLevel { Error, Warning, Notice, Traffic, Debug, None }
@@ -21,4 +22,16 @@ namespace billy_boy.CEC_Receiver
     {
         public bool Activated { get; set; }
     }
+
+    public class CEC_PowerStatusChangedEventArgs : EventArgs
+    {
+        public byte PowerStatus { get; set; }
+        public CecSharp.CecLogicalAddress Device { get; set; }
+    }
+
+    public class CEC_StandbyEventArgs : EventArgs
+    {
+        public CecSharp.CecLogicalAddress Device { get; set; }
+    }
+
 }

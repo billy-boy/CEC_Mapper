@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmConfig));
             this._tabControl = new System.Windows.Forms.TabControl();
             this._tabPage_LibCEC = new System.Windows.Forms.TabPage();
+            this._pict_libCEC_Warning = new System.Windows.Forms.PictureBox();
+            this._lbl_libCEC_Warning = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this._rtb_libCEC_Information = new System.Windows.Forms.RichTextBox();
             this._pictLogo = new System.Windows.Forms.PictureBox();
@@ -75,10 +77,10 @@
             this._columnProcessName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this._tabPage_EventMapping = new System.Windows.Forms.TabPage();
             this._toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this._pict_libCEC_Warning = new System.Windows.Forms.PictureBox();
-            this._lbl_libCEC_Warning = new System.Windows.Forms.Label();
+            this._column_KMKL_KeyboardKeyMode = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this._tabControl.SuspendLayout();
             this._tabPage_LibCEC.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._pict_libCEC_Warning)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictLogo)).BeginInit();
             this._tabPage_KeyMapping.SuspendLayout();
@@ -86,7 +88,6 @@
             ((System.ComponentModel.ISupportInitialize)(this._lstKeyMapMakroList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._lstKeyMapKeyList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._lstProcessView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this._pict_libCEC_Warning)).BeginInit();
             this.SuspendLayout();
             // 
             // _tabControl
@@ -137,6 +138,26 @@
             this._tabPage_LibCEC.Text = "HDMI CEC";
             this._toolTip.SetToolTip(this._tabPage_LibCEC, "libCEC configuration");
             this._tabPage_LibCEC.UseVisualStyleBackColor = true;
+            // 
+            // _pict_libCEC_Warning
+            // 
+            this._pict_libCEC_Warning.BackgroundImage = global::billy_boy.CEC_Mapper.Properties.Resources.warn_32px;
+            this._pict_libCEC_Warning.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this._pict_libCEC_Warning.Location = new System.Drawing.Point(11, 282);
+            this._pict_libCEC_Warning.Name = "_pict_libCEC_Warning";
+            this._pict_libCEC_Warning.Size = new System.Drawing.Size(32, 32);
+            this._pict_libCEC_Warning.TabIndex = 21;
+            this._pict_libCEC_Warning.TabStop = false;
+            // 
+            // _lbl_libCEC_Warning
+            // 
+            this._lbl_libCEC_Warning.AutoSize = true;
+            this._lbl_libCEC_Warning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._lbl_libCEC_Warning.Location = new System.Drawing.Point(49, 292);
+            this._lbl_libCEC_Warning.Name = "_lbl_libCEC_Warning";
+            this._lbl_libCEC_Warning.Size = new System.Drawing.Size(381, 13);
+            this._lbl_libCEC_Warning.TabIndex = 20;
+            this._lbl_libCEC_Warning.Text = "You have to restart CEC_Mapper in order to activate this settings.";
             // 
             // pictureBox1
             // 
@@ -330,7 +351,7 @@
             this._tabPage_KeyMapping.Location = new System.Drawing.Point(4, 23);
             this._tabPage_KeyMapping.Name = "_tabPage_KeyMapping";
             this._tabPage_KeyMapping.Padding = new System.Windows.Forms.Padding(3);
-            this._tabPage_KeyMapping.Size = new System.Drawing.Size(1093, 353);
+            this._tabPage_KeyMapping.Size = new System.Drawing.Size(1093, 355);
             this._tabPage_KeyMapping.TabIndex = 1;
             this._tabPage_KeyMapping.Text = "Key Mapping List";
             this._toolTip.SetToolTip(this._tabPage_KeyMapping, "Maps remote control keys to keyboard keys");
@@ -435,7 +456,6 @@
             this._lstKeyMapMakroList.Size = new System.Drawing.Size(867, 150);
             this._lstKeyMapMakroList.SmallImageList = this._iconList;
             this._lstKeyMapMakroList.TabIndex = 2;
-            this._toolTip.SetToolTip(this._lstKeyMapMakroList, "List of mappings from one remote key to one macro");
             this._lstKeyMapMakroList.UseCompatibleStateImageBehavior = false;
             this._lstKeyMapMakroList.View = System.Windows.Forms.View.Details;
             this._lstKeyMapMakroList.SelectionChanged += new System.EventHandler(this._lstKeyMapMakroList_SelectionChanged);
@@ -531,19 +551,20 @@
             this._lstKeyMapKeyList.AllColumns.Add(this._column_KMKL_KeyboardShift);
             this._lstKeyMapKeyList.AllColumns.Add(this._column_KMKL_KeyboardAlt);
             this._lstKeyMapKeyList.AllColumns.Add(this._column_KMKL_KeyboardControl);
+            this._lstKeyMapKeyList.AllColumns.Add(this._column_KMKL_KeyboardKeyMode);
             this._lstKeyMapKeyList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this._column_KMKL_CECKey,
             this._column_KMKL_KeyboardKey,
             this._column_KMKL_KeyboardShift,
             this._column_KMKL_KeyboardAlt,
-            this._column_KMKL_KeyboardControl});
+            this._column_KMKL_KeyboardControl,
+            this._column_KMKL_KeyboardKeyMode});
             this._lstKeyMapKeyList.FullRowSelect = true;
             this._lstKeyMapKeyList.Location = new System.Drawing.Point(218, 6);
             this._lstKeyMapKeyList.Name = "_lstKeyMapKeyList";
             this._lstKeyMapKeyList.Size = new System.Drawing.Size(867, 150);
             this._lstKeyMapKeyList.SmallImageList = this._iconList;
             this._lstKeyMapKeyList.TabIndex = 1;
-            this._toolTip.SetToolTip(this._lstKeyMapKeyList, "List of mappings from one remote key to one keyboard key combination");
             this._lstKeyMapKeyList.UseCompatibleStateImageBehavior = false;
             this._lstKeyMapKeyList.View = System.Windows.Forms.View.Details;
             this._lstKeyMapKeyList.SelectionChanged += new System.EventHandler(this._lstKeyMapKeyList_SelectionChanged);
@@ -592,7 +613,6 @@
             this._lstProcessView.Size = new System.Drawing.Size(204, 306);
             this._lstProcessView.SmallImageList = this._iconList;
             this._lstProcessView.TabIndex = 0;
-            this._toolTip.SetToolTip(this._lstProcessView, "List of applications to communicate with");
             this._lstProcessView.UseCompatibleStateImageBehavior = false;
             this._lstProcessView.View = System.Windows.Forms.View.Details;
             this._lstProcessView.SelectionChanged += new System.EventHandler(this._lstProcessView_SelectionChanged);
@@ -604,7 +624,7 @@
             this._columnProcessName.Groupable = false;
             this._columnProcessName.IsEditable = false;
             this._columnProcessName.Text = "Process name";
-            this._columnProcessName.ToolTipText = "The name of the process";
+            this._columnProcessName.ToolTipText = "";
             this._columnProcessName.Width = 150;
             // 
             // _tabPage_EventMapping
@@ -612,31 +632,16 @@
             this._tabPage_EventMapping.ImageIndex = 0;
             this._tabPage_EventMapping.Location = new System.Drawing.Point(4, 23);
             this._tabPage_EventMapping.Name = "_tabPage_EventMapping";
-            this._tabPage_EventMapping.Size = new System.Drawing.Size(1093, 353);
+            this._tabPage_EventMapping.Size = new System.Drawing.Size(1093, 355);
             this._tabPage_EventMapping.TabIndex = 2;
             this._tabPage_EventMapping.Text = "Event Mapping List";
             this._toolTip.SetToolTip(this._tabPage_EventMapping, "Maps remote control events to keyboard keys");
             this._tabPage_EventMapping.UseVisualStyleBackColor = true;
             // 
-            // _pict_libCEC_Warning
+            // _column_KMKL_KeyboardKeyMode
             // 
-            this._pict_libCEC_Warning.BackgroundImage = global::billy_boy.CEC_Mapper.Properties.Resources.warn_32px;
-            this._pict_libCEC_Warning.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this._pict_libCEC_Warning.Location = new System.Drawing.Point(11, 282);
-            this._pict_libCEC_Warning.Name = "_pict_libCEC_Warning";
-            this._pict_libCEC_Warning.Size = new System.Drawing.Size(32, 32);
-            this._pict_libCEC_Warning.TabIndex = 21;
-            this._pict_libCEC_Warning.TabStop = false;
-            // 
-            // _lbl_libCEC_Warning
-            // 
-            this._lbl_libCEC_Warning.AutoSize = true;
-            this._lbl_libCEC_Warning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._lbl_libCEC_Warning.Location = new System.Drawing.Point(49, 292);
-            this._lbl_libCEC_Warning.Name = "_lbl_libCEC_Warning";
-            this._lbl_libCEC_Warning.Size = new System.Drawing.Size(381, 13);
-            this._lbl_libCEC_Warning.TabIndex = 20;
-            this._lbl_libCEC_Warning.Text = "You have to restart CEC_Mapper in order to activate this settings.";
+            this._column_KMKL_KeyboardKeyMode.Text = "Modus";
+            this._column_KMKL_KeyboardKeyMode.Width = 100;
             // 
             // frmConfig
             // 
@@ -653,6 +658,7 @@
             this._tabControl.ResumeLayout(false);
             this._tabPage_LibCEC.ResumeLayout(false);
             this._tabPage_LibCEC.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._pict_libCEC_Warning)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._pictLogo)).EndInit();
             this._tabPage_KeyMapping.ResumeLayout(false);
@@ -661,7 +667,6 @@
             ((System.ComponentModel.ISupportInitialize)(this._lstKeyMapMakroList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._lstKeyMapKeyList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._lstProcessView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this._pict_libCEC_Warning)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -715,5 +720,6 @@
         private System.Windows.Forms.TabPage _tabPage_EventMapping;
         private System.Windows.Forms.PictureBox _pict_libCEC_Warning;
         private System.Windows.Forms.Label _lbl_libCEC_Warning;
+        private BrightIdeasSoftware.OLVColumn _column_KMKL_KeyboardKeyMode;
     }
 }
